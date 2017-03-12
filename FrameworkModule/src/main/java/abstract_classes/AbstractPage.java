@@ -1,6 +1,6 @@
 package abstract_classes;
 
-import driver.BrowserManager;
+import driver.Browser;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -14,11 +14,11 @@ import ru.yandex.qatools.htmlelements.loader.HtmlElementLoader;
 public abstract class AbstractPage<T extends AbstractPage> {
 
     public AbstractPage() {
-        HtmlElementLoader.populatePageObject(this, BrowserManager.getBrowserInstance());
+        HtmlElementLoader.populatePageObject(this, Browser.getInstance());
     }
 
     public T refreshPage(){
-        BrowserManager.getBrowserInstance().navigate().refresh();
+        Browser.getInstance().navigate().refresh();
         return (T) this;
     }
 
@@ -29,8 +29,7 @@ public abstract class AbstractPage<T extends AbstractPage> {
 
     protected AbstractPage doubleClick(WebElement element){
         waitForElementToBeClickable(element);
-        Actions action = new Actions(BrowserManager.getBrowserInstance());
-        action.doubleClick(element).perform();
+        initActions().doubleClick(element).perform();
         return this;
     }
 
@@ -41,13 +40,16 @@ public abstract class AbstractPage<T extends AbstractPage> {
 
     protected AbstractPage moveToElement(WebElement element){
         waitForElementToBeClickable(element);
-        Actions actions = new Actions(BrowserManager.getBrowserInstance());
-        actions.moveToElement(element).perform();
+        initActions().moveToElement(element).perform();
         return this;
     }
 
+    private Actions initActions(){
+        return new Actions(Browser.getInstance());
+    }
+
     private WebElement waitForElementToBeClickable(WebElement element){
-        WebDriverWait wait = new WebDriverWait(BrowserManager.getBrowserInstance(),5);
+        WebDriverWait wait = new WebDriverWait(Browser.getInstance(),5);
         wait.ignoring(StaleElementReferenceException.class)
                 .until(ExpectedConditions.elementToBeClickable(element));
         return element;

@@ -9,6 +9,12 @@ import org.testng.annotations.Test;
 public class GoogleTest extends AbstractGoogleTest{
     @Test
     public void firstTest(){
+        System.out.println("test1");
+        mainGooglePage.refreshPage();
+    }
+    @Test
+    public void secondTest(){
+        System.out.println("test2");
         mainGooglePage.refreshPage();
     }
 }

@@ -1,6 +1,6 @@
 package drivermanager;
 
-import driver.BrowserManager;
+import driver.Browser;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeMethod;
@@ -13,19 +13,20 @@ public class BrowserManagerTest {
     @BeforeMethod
     public void startBrowser(){
 
-        BrowserManager.startFirefox().get("http://google.com");
+        Browser.startFirefox().get("http://google.com");
     }
 
-//    @Test
+    @Test
     public void firstTest(){
-        Assert.assertTrue(BrowserManager.startFirefox().getCurrentUrl() != null);
-        BrowserManager.tearDown();
-        BrowserManager.startChrome();
-        Assert.assertTrue(BrowserManager.startChrome().getCurrentUrl() != null);
+        System.out.println("FM test");
+        Assert.assertTrue(Browser.startFirefox().getCurrentUrl() != null);
+        Browser.tearDown();
+        Browser.startChrome();
+        Assert.assertTrue(Browser.startChrome().getCurrentUrl() != null);
     }
 
     @AfterClass
     public void closeBrowser(){
-        BrowserManager.tearDown();
+        Browser.tearDown();
     }
 }

@@ -10,21 +10,30 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 /**
  * Created by dante on 3/11/17.
  */
-public class BrowserManager {
+public class Browser {
+
+    static {
+        ChromeDriverManager.getInstance().setup();
+        FirefoxDriverManager.getInstance().setup();
+    }
+    private static Browser instance = new Browser();
 
     private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
-    private BrowserManager(){
-
+    private Browser(){
     }
 
-    public static WebDriver getBrowserInstance(){
+    public static WebDriver getInstance(){
+        return instance.getDriver();
+    }
+
+    private WebDriver getDriver(){
         return driver.get();
     }
 
     public static WebDriver startChrome(){
         if(getBrowser("chrome").getClass().equals(ChromeDriver.class)) {
-           return driver.get();
+           return getInstance();
         }else{
             return throwExceptionAndReturnDriver();
         }
@@ -32,7 +41,7 @@ public class BrowserManager {
 
     public static WebDriver startFirefox() {
         if(getBrowser("firefox").getClass().equals(FirefoxDriver.class)) {
-            return driver.get();
+            return getInstance();
         }else{
             return throwExceptionAndReturnDriver();
         }
@@ -47,11 +56,9 @@ public class BrowserManager {
         if (driver.get() == null) {
             switch (browser) {
                 case "chrome":
-                    ChromeDriverManager.getInstance().setup();
                     driver.set(new ChromeDriver());
                     break;
                 default:
-                    FirefoxDriverManager.getInstance().setup();
                     driver.set(new FirefoxDriver());
                 break;
             }
